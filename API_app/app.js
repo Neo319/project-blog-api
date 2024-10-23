@@ -1,9 +1,8 @@
 require("dotenv").config();
 
 const express = require("express");
-const jwt = require("jsonwebtoken");
-
 const port = process.env.PORT || 2000;
+const indexRouter = require("./routes/index");
 
 const app = express();
 
@@ -12,6 +11,8 @@ app.get("/", (req, res) => {
     message: "hello world!",
   });
 });
+
+app.use("/api", indexRouter);
 
 app.listen(port, (req, res) => {
   console.log(`server listening on port ${port}`);
