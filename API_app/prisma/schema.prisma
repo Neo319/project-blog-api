@@ -15,12 +15,29 @@ model user {
 
   isAuthor Boolean
   Posts    post[]
+  Comments comment[]
 }
 
 model post {
-  id    Int    @id @default(autoincrement())
-  title String @unique
+  id    Int      @id @default(autoincrement())
+  title String   @unique
+  date  DateTime @default(now())
+
+  userId   Int
+  User     user      @relation(fields: [userId], references: [id])
+  Comments comment[]
+
+  isPublic Boolean
+  textData Json
+}
+
+model comment {
+  id   Int      @id @default(autoincrement())
+  date DateTime @default(now())
 
   userId Int
   User   user @relation(fields: [userId], references: [id])
+
+  postId Int
+  Post   post @relation(fields: [postId], references: [id])
 }
