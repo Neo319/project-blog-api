@@ -9,6 +9,7 @@ Main purpose: setting up an API, and then accessing it _from the outside_. Demon
 
 - HTML, CSS, Javascript
 - Node.js, expresss
+- PSQL via Prisma.io
 
 my chosen structure: monorepo.
 
