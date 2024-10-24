@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", indexRouter);
-app.use("/posts", postsRouter);
+app.use("/api/posts", postsRouter);
 
 app.listen(port, (req, res) => {
   console.log(`server listening on port ${port}`);

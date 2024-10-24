@@ -28,7 +28,11 @@ const login_post = async (req, res) => {
   // getting credentials
   const { username, password } = req.body;
   // Find user
-  const user = users.find((u) => u.username === username);
+  const user = await prisma.user.findUnique({
+    where: {
+      username: username,
+    },
+  });
   if (!user) {
     console.log("User was not foud.");
     return res.status(401).send({ message: "User was not found!" });
