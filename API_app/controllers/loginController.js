@@ -8,6 +8,14 @@ const login_get = (req, res) => {
   });
 };
 
+// TODO: add JWT authorization; implement passport.
+
+// PROTECTED ROUTES:
+// User detail, update users, POST comment (?)
+
+// NON JWT-PROTECTED:
+// sign-ups, logins,
+
 module.exports = {
   login_get,
 };
