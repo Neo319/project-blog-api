@@ -50,8 +50,6 @@ const signup_post = async (req, res) => {
           password: req.body.newUser.password,
 
           isAuthor: false,
-          Posts: [],
-          Comments: [],
         },
       });
       console.log("[debug]: created user in db.");
