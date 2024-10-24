@@ -6,6 +6,9 @@ const indexRouter = require("./routes/index");
 
 const app = express();
 
+//parsing json payloads
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.json({
     message: "hello world!",

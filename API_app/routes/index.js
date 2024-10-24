@@ -10,7 +10,14 @@ router.get("/", (req, res) => {
   });
 });
 
+// ---- LOGIN CONTROLLER ROUTES ----
+
 //logins
 router.get("/login", loginController.login_get);
+
+//signps
+router.get("/signup", loginController.signup_get);
+
+router.post("/signup", loginController.signup_post);
 
 module.exports = router;
