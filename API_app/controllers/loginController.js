@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 // Our custom JWT authorization middleware
 const verify = require("../config/jwt");
 
+const bcrypt = require("bcryptjs");
+
 // ---- ROUTES ----
 
 // temp : mock database
@@ -16,7 +18,7 @@ const users = [
     id: 1,
     username: "Jane",
     email: "Jane@gmail.com",
-    password: "asdf",
+    password: bcrypt.hashSync("asdf"),
   },
 ];
 
@@ -24,16 +26,25 @@ const users = [
 // curl http://localhost:3000/api/login -X POST -H "Content-Type: application/json" -d '{"username": "Jane", "password": "asdf"}'
 
 // create JWT token and log in
-const login_post = (req, res) => {
+const login_post = async (req, res) => {
   // getting credentials
   const { username, password } = req.body;
-  console.log({ username, password });
 
+  // Find user
   const user = users.find((u) => u.username === username);
   if (!user) {
     console.log("User was not foud.");
     return res.status(401).send({ message: "User was not found!" });
   }
+
+  // compare passwords
+  const passwordIsValid = await bcrypt.compare(password, user.password);
+  if (!passwordIsValid) {
+    console.log("Incorrect password");
+    return res.status(401).send({ message: "Incorrect password!" });
+  }
+
+  // authorization success: create JWT token
 
   console.log("user found: ", user);
 
