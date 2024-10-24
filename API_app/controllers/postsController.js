@@ -17,9 +17,16 @@ const posts = [
   },
 ];
 
+// --- GET list of blog posts ---
 const posts_get = (req, res) => {
+  // temp implementation: returns ALL posts, selecting title, date, author ONLY.
+  const result = posts.find((post) => {
+    return { title: post.title, date: post.date }; // TODO: name is complicated.
+  });
+
   res.json({
-    message: "GET posts request recieved (NOT IMPLEMENTED)",
+    message: "GET posts request recieved",
+    posts: result,
   });
 };
 
