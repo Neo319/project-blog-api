@@ -10,20 +10,32 @@ const verify = require("../config/jwt");
 
 // ---- ROUTES ----
 
-// authorize token created by user
-const login_get = (req, res) => {
-  // Get credentials
-  if (!req.body.user) {
-    console.log("Error: user not found");
-    res.json({
-      message: "error: user not found.",
-    });
-    res.status(400);
+// temp : mock database
+const users = [
+  {
+    id: 1,
+    username: "Jane",
+    email: "Jane@gmail.com",
+    password: "asdf",
+  },
+];
+
+//temp: sample login
+// curl http://localhost:3000/api/login -X POST -H "Content-Type: application/json" -d '{"username": "Jane", "password": "asdf"}'
+
+// create JWT token and log in
+const login_post = (req, res) => {
+  // getting credentials
+  const { username, password } = req.body;
+  console.log({ username, password });
+
+  const user = users.find((u) => u.username === username);
+  if (!user) {
+    console.log("User was not foud.");
+    return res.status(401).send({ message: "User was not found!" });
   }
 
-  // DB authentication
-
-  //
+  console.log("user found: ", user);
 
   res.json({
     message: "Login request recieved (NOT IMPLEMENTED)",
@@ -84,7 +96,7 @@ const signup_post = async (req, res) => {
 // sign-ups, logins,
 
 module.exports = {
-  login_get,
+  login_post,
   signup_get,
   signup_post,
 };

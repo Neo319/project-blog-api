@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 // ---- LOGIN CONTROLLER ROUTES ----
 
 //logins
-router.get("/login", loginController.login_get);
+router.post("/login", loginController.login_post);
 
 //signps
 router.get("/signup", loginController.signup_get);
