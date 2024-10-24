@@ -8,4 +8,7 @@ const postsController = require("../controllers/postsController");
 // list posts
 router.get("/", postsController.posts_get);
 
+// create new post (protected)
+router.post("/", postsController.posts_post);
+
 module.exports = router;

@@ -2,6 +2,9 @@
 // const { PrismaClient } = require("@prisma/client");
 // const prisma = new PrismaClient();
 
+const jwt = require("jsonwebtoken");
+const verify = require("../config/jwt");
+
 // temp: sample db
 const posts = [
   {
@@ -30,6 +33,30 @@ const posts_get = (req, res) => {
   });
 };
 
+//temp: sample req
+// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": "1", "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
+
+// --- protected : POST new blog posts ---
+const posts_post = [
+  verify,
+  (req, res) => {
+    // temp: no db
+    const { authorId, title, text } = req.body;
+
+    if (!authorId || !title || !text) {
+      console.log("missing data to post.");
+      return res.status(400).send({ message: "missing data to post." });
+    }
+
+    // data is good, user is verified; post article
+
+    //temp: just return the article
+    res.send({
+      message: "Authorized user + data and posted article.",
+    });
+  },
+];
+
 // TODO: implement PROTECTED ROUTES:
 // - Create, Update, Delete posts
 
@@ -38,4 +65,5 @@ const posts_get = (req, res) => {
 
 module.exports = {
   posts_get,
+  posts_post,
 };
