@@ -71,7 +71,7 @@ const signup_post = async (req, res) => {
       data: {
         username: username,
         email: email,
-        password: bcrypt.hashSync(req.body.newUser.password),
+        password: bcrypt.hashSync(password),
 
         isAuthor: false,
       },
@@ -81,7 +81,7 @@ const signup_post = async (req, res) => {
   } catch (err) {
     console.log("signup err");
     console.error(err.message);
-    res.status(400);
+    return res.status(400).send({ message: "error during signup." });
   }
 
   res.json({
@@ -100,6 +100,5 @@ const signup_post = async (req, res) => {
 
 module.exports = {
   login_post,
-  signup_get,
   signup_post,
 };
