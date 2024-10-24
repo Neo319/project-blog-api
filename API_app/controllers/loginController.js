@@ -52,13 +52,12 @@ const login_post = async (req, res) => {
   });
 };
 
+// tmp: saple request
+// curl -X POST -H "Content-Type: application/json" -d '{"username": "first", "email": "first@gmail.com", "password": "fdsa"}' http://localhost:3000/api/signup/
+
 // ---- create new User in Database ----
 const signup_post = async (req, res) => {
   const { username, password, email } = req.body;
-
-  // tmp
-  // sample request: (?)
-  // curl -X POST -H "Content-Type: application/json" -d '{"username": "first", "email": "first@gmail.com", "password": "fdsa"}' http://localhost:3000/api/signup/
 
   if (!username || !password || !email) {
     console.log("Error: incomplete credentials");
@@ -91,8 +90,12 @@ const signup_post = async (req, res) => {
   console.log("[debug] reached end of function");
 };
 
+// temp: sample req (replace token)
+// curl -H "Authorization: Bearer >token<" http://localhost:3000/api/user
+
 // (note: first 'verify' calls a middleware function defined in config.)
 // Protected route test:
+// ---- GET USER DETAILS ----
 const user_detail = [
   verify,
   async function (req, res) {
@@ -107,9 +110,6 @@ const user_detail = [
     });
   },
 ];
-
-// temp: sample req (replace token)
-// curl -H "Authorization: Bearer >token<" http://localhost:3000/api/user
 
 //
 
