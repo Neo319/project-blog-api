@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 // how authentication is handled
 const jwt = require("jsonwebtoken");
+const verify = require("../config/jwt");
 const bcrypt = require("bcryptjs");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -90,6 +91,30 @@ const signup_post = async (req, res) => {
   console.log("[debug] reached end of function");
 };
 
+// (note: first 'verify' calls a middleware function defined in config.)
+// Protected route test:
+const user_detail = [
+  verify,
+  async function (req, res) {
+    jwt.verify(req.token, SECRET_KEY, (err, authData) => {
+      if (err) {
+        return res.status(403).send({ message: "error during authorization." });
+      }
+      res.json({
+        message: "authorization success; user Detail sent.",
+        // TODO: how to actually send user data?
+      });
+    });
+  },
+];
+
+// temp: sample req (replace token)
+// curl -H "Authorization: Bearer >token<" http://localhost:3000/api/user
+
+//
+
+// ---
+
 // TODO: add JWT authorization; implement passport.
 
 // PROTECTED ROUTES:
@@ -101,4 +126,5 @@ const signup_post = async (req, res) => {
 module.exports = {
   login_post,
   signup_post,
+  user_detail,
 };
