@@ -3,12 +3,10 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // how authentication is handled
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
-// Our custom JWT authorization middleware
-const verify = require("../config/jwt");
-
 const bcrypt = require("bcryptjs");
+
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // ---- ROUTES ----
 
@@ -45,11 +43,14 @@ const login_post = async (req, res) => {
   }
 
   // authorization success: create JWT token
-
-  console.log("user found: ", user);
+  const token = jwt.sign({ user: user }, SECRET_KEY, {
+    // token options
+    expiresIn: "10000s",
+  });
 
   res.json({
-    message: "Login request recieved (NOT IMPLEMENTED)",
+    message: "Login request success.",
+    token: token,
   });
 };
 
