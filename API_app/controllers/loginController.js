@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 // how authentication is handled
+const passport = require("passport");
 const jwt = require("jsonwebtoken");
 // Our custom JWT authorization middleware
 const verify = require("../config/jwt");
@@ -11,6 +12,19 @@ const verify = require("../config/jwt");
 
 // authorize token created by user
 const login_get = (req, res) => {
+  // Get credentials
+  if (!req.body.user) {
+    console.log("Error: user not found");
+    res.json({
+      message: "error: user not found.",
+    });
+    res.status(400);
+  }
+
+  // DB authentication
+
+  //
+
   res.json({
     message: "Login request recieved (NOT IMPLEMENTED)",
   });
@@ -22,7 +36,6 @@ const signup_get = (req, res) => {
   });
 };
 
-// create a new token
 const signup_post = async (req, res) => {
   // START HERE: implement passport, JWT
 
@@ -31,15 +44,7 @@ const signup_post = async (req, res) => {
 
   // tmp
   // sample request: (?)
-  // curl -X POST -H "Content-Type: application/json" -d "{newUser : {username: "first", email: "first@gmail.com", password: "fdsa"}}" http://localhost:3000/api/signup/
   // curl -X POST -H "Content-Type: application/json" -d '{"newUser": {"username": "first", "email": "first@gmail.com", "password": "fdsa"}}' http://localhost:3000/api/signup/
-
-  if (typeof req.body.newUser == "undefined") {
-    console.log("no new user found.");
-    res.json({
-      message: "incomplete request",
-    });
-  }
 
   if (typeof req.body.newUser !== "undefined") {
     try {
@@ -65,7 +70,7 @@ const signup_post = async (req, res) => {
   }
 
   res.json({
-    message: "Signup POST request (NOT IMPLEMENTED)",
+    message: "Signup POST request completed.",
   });
   console.log("[debug] reached end of function");
 };
