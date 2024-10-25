@@ -27,33 +27,44 @@ const users = [
 const login_post = async (req, res) => {
   // getting credentials
   const { username, password } = req.body;
-  // Find user
-  const user = await prisma.user.findUnique({
-    where: {
-      username: username,
-    },
-  });
-  if (!user) {
-    console.log("User was not foud.");
-    return res.status(401).send({ message: "User was not found!" });
-  }
-  // compare passwords
-  const passwordIsValid = await bcrypt.compare(password, user.password);
-  if (!passwordIsValid) {
-    console.log("Incorrect password");
-    return res.status(401).send({ message: "Incorrect password!" });
+
+  if (!username || !password) {
+    console.log("error: incomplete request");
+    return res.status(403).send({ message: "Error: incomplete request." });
   }
 
-  // --- authorization success: create JWT token ---
-  const token = jwt.sign({ user: user }, SECRET_KEY, {
-    // token options
-    expiresIn: "10000s",
-  });
-  // TODO: determine what to do with this token?
-  res.json({
-    message: "Login request success.",
-    token: token,
-  });
+  // Find user
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    if (!user) {
+      console.log("User was not found.");
+      return res.status(401).send({ message: "User was not found!" });
+    }
+    // compare passwords
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+    if (!passwordIsValid) {
+      console.log("Incorrect password");
+      return res.status(401).send({ message: "Incorrect password!" });
+    }
+
+    // --- authorization success: create JWT token ---
+    const token = jwt.sign({ user: user }, SECRET_KEY, {
+      // token options
+      expiresIn: "10000s",
+    });
+    // TODO: determine what to do with this token?
+    res.json({
+      message: "Login request success.",
+      token: token,
+    });
+  } catch (err) {
+    console.log("error during login.");
+    return res.status(403).send({ message: "Error during login." });
+  }
 };
 
 // tmp: saple request
