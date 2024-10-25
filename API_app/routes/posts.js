@@ -3,6 +3,9 @@ const router = express.Router();
 
 const postsController = require("../controllers/postsController");
 
+const commentsRouter = require("./comments");
+router.use("/comments", commentsRouter);
+
 // all routes involving posts
 
 // list posts

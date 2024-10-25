@@ -203,11 +203,7 @@ const posts_delete = [
   },
 ];
 
-// TODO: implement PROTECTED ROUTES:
-// - Create, Update, Delete posts
-
-// PUBLIC ROUTES:
-// - Read / GET posts
+// TODO: POST DETAIL
 
 module.exports = {
   posts_get,

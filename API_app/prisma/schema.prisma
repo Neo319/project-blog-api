@@ -40,4 +40,6 @@ model comment {
 
   postId Int
   Post   post @relation(fields: [postId], references: [id])
+
+  text String
 }
