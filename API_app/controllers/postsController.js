@@ -7,21 +7,6 @@ const verify = require("../config/jwt");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-// temp: sample db
-const posts = [
-  {
-    id: 1,
-    title: "first",
-    date: Date.now(),
-
-    userId: 1,
-
-    isPublic: false,
-    textData:
-      '{"article" : "Hello! This is my first article. There should be a lot of text here."}',
-  },
-];
-
 // --- GET list of blog posts ---
 const posts_get = async (req, res) => {
   // temp: returns first 10 posts, selecting title, date, author ONLY.
@@ -30,7 +15,11 @@ const posts_get = async (req, res) => {
     select: {
       title: true,
       date: true,
-      // TODO: return user object selecting only name?
+      User: {
+        select: {
+          username: true,
+        },
+      },
     },
     take: 10,
   });

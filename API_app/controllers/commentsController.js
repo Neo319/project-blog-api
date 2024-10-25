@@ -7,20 +7,6 @@ const verify = require("../config/jwt");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-// temp: sample db
-const comments = [
-  {
-    id: 1,
-    title: "first",
-    date: Date.now(),
-
-    userId: 1,
-    postId: 1,
-
-    text: "Hello world!",
-  },
-];
-
 // should look like : "/api/posts/comments/:postId"
 
 // --- GET all comments of one post ---
@@ -35,7 +21,11 @@ const comments_get = async (req, res) => {
       select: {
         date: true,
         text: true,
-        // TODO: return user object selecting only name?
+        User: {
+          select: {
+            username: true,
+          },
+        },
       },
       take: 10,
       where: {
@@ -45,7 +35,7 @@ const comments_get = async (req, res) => {
 
     res.json({
       message: "GET posts request recieved",
-      posts: result,
+      comments: result,
     });
   } catch (err) {
     console.log("error finding comments", err.message);

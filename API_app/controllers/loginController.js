@@ -9,16 +9,6 @@ const bcrypt = require("bcryptjs");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-// temp : mock database
-const users = [
-  {
-    id: 1,
-    username: "Jane",
-    email: "Jane@gmail.com",
-    password: bcrypt.hashSync("asdf"),
-  },
-];
-
 //temp: sample login
 // curl http://localhost:3000/api/login -X POST -H "Content-Type: application/json" -d '{"username": "Jane", "password": "asdf"}'
 
@@ -91,7 +81,6 @@ const signup_post = async (req, res) => {
         isAuthor: false,
       },
     });
-    console.log("[debug]: created user in db.");
     console.log(result);
   } catch (err) {
     console.log("signup err");
@@ -102,7 +91,6 @@ const signup_post = async (req, res) => {
   res.json({
     message: "Signup POST request completed.",
   });
-  console.log("[debug] reached end of function");
 };
 
 // temp: sample req (replace token)
@@ -116,13 +104,11 @@ const user_detail = [
   async function (req, res) {
     jwt.verify(req.token, SECRET_KEY, (err, authData) => {
       if (err) {
-        console.log("[debug]: auth = ", authData);
         return res.status(403).send({ message: "error during authorization." });
       }
       res.json({
         message: "authorization success; user Detail sent.",
         data: authData,
-        // TODO: how to actually send user data?
       });
     });
   },
@@ -207,16 +193,6 @@ const user_delete = [
 ];
 
 //
-
-// ---
-
-// TODO: add JWT authorization; implement passport.
-
-// PROTECTED ROUTES:
-// User detail, update users, POST comment (?)
-
-// NON JWT-PROTECTED:
-// sign-ups, logins,
 
 module.exports = {
   login_post,
