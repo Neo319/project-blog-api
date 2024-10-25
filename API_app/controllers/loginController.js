@@ -146,9 +146,14 @@ const user_put = [
         return res.status(403).send({ message: "Error: incomplete request." });
       }
 
+      console.log("[debug]: auth = ", authData);
+
       // updating the user in db
       try {
         result = await prisma.user.update({
+          where: {
+            id: authData.user.id,
+          },
           data: {
             username: username,
             password: password,

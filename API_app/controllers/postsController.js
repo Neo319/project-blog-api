@@ -5,6 +5,8 @@
 const jwt = require("jsonwebtoken");
 const verify = require("../config/jwt");
 
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 // temp: sample db
 const posts = [
   {
@@ -41,18 +43,32 @@ const posts_post = [
   verify,
   (req, res) => {
     // temp: no db
-    const { authorId, title, text } = req.body;
+    const { authorId, title, text, isPublic } = req.body;
 
+    // ensure req has needed data
     if (!authorId || !title || !text) {
       console.log("missing data to post.");
       return res.status(400).send({ message: "missing data to post." });
     }
 
-    // data is good, user is verified; post article
+    // ensure user is author
+    jwt.verify(req.token, SECRET_KEY, async (err, authData) => {
+      if (err) {
+        return res.status(403).send({ message: "error during authorization." });
+      }
 
-    //temp: just return the article
-    res.send({
-      message: "Authorized user + data and posted article.",
+      const userIsAuthor = authData.isAuthor;
+      if (!userIsAuthor)
+        return res
+          .status(403)
+          .send({ message: "Forbidden: user is not author." });
+
+      // data is good, user is verified; post article
+      //temp: just return the article
+      res.json({
+        message: "Authorized user + data and posted article.",
+        data: authData,
+      });
     });
   },
 ];
