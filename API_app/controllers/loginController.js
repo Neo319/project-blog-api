@@ -116,13 +116,24 @@ const user_detail = [
   async function (req, res) {
     jwt.verify(req.token, SECRET_KEY, (err, authData) => {
       if (err) {
+        console.log("[debug]: auth = ", authData);
         return res.status(403).send({ message: "error during authorization." });
       }
       res.json({
         message: "authorization success; user Detail sent.",
+        data: authData,
         // TODO: how to actually send user data?
       });
     });
+  },
+];
+
+// user should only be able to update / delete self
+// ---- UPDATE USER ---
+const user_put = [
+  verify,
+  async function (req, res) {
+    //
   },
 ];
 
