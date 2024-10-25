@@ -140,14 +140,13 @@ const posts_put = [
           },
         });
       } catch (err) {
-        console.log("error during post update.");
+        console.log("error during post update.", err.message);
         return res.status(400).send({ message: "Error during post update." });
       }
 
       res.json({
         message: "Authorized user + data and posted article.",
         data: {
-          authorId,
           title,
           text,
           isPublic: isPublic === "true" ? true : false,
