@@ -156,8 +156,8 @@ const user_put = [
           },
           data: {
             username: username,
-            password: password,
-            isAuthor: isAuthor ? true : false,
+            password: bcrypt.hashSync(password),
+            isAuthor: isAuthor === "true" ? true : false,
           },
         });
         console.log("[debug]: update user in db.");
