@@ -128,6 +128,9 @@ const user_detail = [
   },
 ];
 
+// tmp: sample curl
+// curl -H "Authorization: <token>" -X PUT -d '{"username": "firstAuthor", "email": "auth@gmail.com", "password": "asdf", "isAuthor": "true"}' -H "Content-Type: application/json" http://localhost:3000/api/user
+
 // user should only be able to update / delete self
 // ---- UPDATE USER ---
 const user_put = [
@@ -146,7 +149,7 @@ const user_put = [
         return res.status(403).send({ message: "Error: incomplete request." });
       }
 
-      console.log("[debug]: auth = ", authData);
+      let result = {};
 
       // updating the user in db
       try {
@@ -167,10 +170,16 @@ const user_put = [
         console.error(err.message);
         return res.status(400).send({ message: "error during update user." });
       }
+
+      res.json({ message: "user successfully updated.", data: result });
     });
   },
 ];
 
+//sample req:
+// curl -H "Authorization: <token>" -X DELETE -d -H "Content-Type: application/json" http://localhost:3000/api/user
+
+// ---- DELETE USERS ----
 const user_delete = [
   verify,
   async function (req, res) {
@@ -183,7 +192,7 @@ const user_delete = [
       try {
         await prisma.user.delete({
           where: {
-            id: authData.id,
+            id: authData.user.id,
           },
         });
       } catch (err) {
@@ -191,6 +200,8 @@ const user_delete = [
         console.error(err.message);
         return res.status(400).send({ message: "error during delete user." });
       }
+
+      res.json({ message: "user successfully deleted." });
     });
   },
 ];
