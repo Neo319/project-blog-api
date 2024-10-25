@@ -1,6 +1,6 @@
 //database connection
-// const { PrismaClient } = require("@prisma/client");
-// const prisma = new PrismaClient();
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const jwt = require("jsonwebtoken");
 const verify = require("../config/jwt");
@@ -23,11 +23,16 @@ const posts = [
 ];
 
 // --- GET list of blog posts ---
-const posts_get = (req, res) => {
-  // temp implementation: returns ALL posts, selecting title, date, author ONLY.
-  // ------------- TODO: read from prisma here -------------
-  const result = posts.find((post) => {
-    return { title: post.title, date: post.date }; // TODO: name is complicated.
+const posts_get = async (req, res) => {
+  // temp: returns first 10 posts, selecting title, date, author ONLY.
+
+  const result = await prisma.post.findMany({
+    select: {
+      title: true,
+      date: true,
+      User: true,
+    },
+    take: 10,
   });
 
   res.json({
@@ -37,7 +42,7 @@ const posts_get = (req, res) => {
 };
 
 //temp: sample req
-// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": "1", "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
+// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": 1, "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
 
 // --- protected : POST new blog posts ---
 const posts_post = [
@@ -66,7 +71,21 @@ const posts_post = [
 
       // data is good, user is verified; post article
       //temp: just return the article
-      // ------------- TODO: upload to prisma here -------------
+      try {
+        await prisma.post.create({
+          data: {
+            userId: authData.user.id,
+            title: title,
+            textData: text,
+
+            isPublic: isPublic === "true" ? true : false,
+          },
+        });
+      } catch (err) {
+        console.log("error during post upload.");
+        return res.status(400).send({ message: "Error during post upload." });
+      }
+
       res.json({
         message: "Authorized user + data and posted article.",
         data: {
