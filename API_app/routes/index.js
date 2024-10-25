@@ -21,4 +21,10 @@ router.post("/signup", loginController.signup_post);
 //view user detail
 router.get("/user", loginController.user_detail);
 
+//update user
+router.put("/user", loginController.user_put);
+
+//update user
+router.delete("/user", loginController.user_delete);
+
 module.exports = router;

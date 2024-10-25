@@ -133,7 +133,60 @@ const user_detail = [
 const user_put = [
   verify,
   async function (req, res) {
-    //
+    jwt.verify(req.token, SECRET_KEY, async (err, authData) => {
+      if (err) {
+        return res.status(403).send({ message: "error during authorization." });
+      }
+
+      // getting credentials
+      const { username, password, isAuthor } = req.body;
+
+      if (!username || !password) {
+        console.log("error: incomplete request");
+        return res.status(403).send({ message: "Error: incomplete request." });
+      }
+
+      // updating the user in db
+      try {
+        result = await prisma.user.update({
+          data: {
+            username: username,
+            password: password,
+            isAuthor: isAuthor ? true : false,
+          },
+        });
+        console.log("[debug]: update user in db.");
+        console.log(result);
+      } catch (err) {
+        console.log("update user err");
+        console.error(err.message);
+        return res.status(400).send({ message: "error during update user." });
+      }
+    });
+  },
+];
+
+const user_delete = [
+  verify,
+  async function (req, res) {
+    jwt.verify(req.token, SECRET_KEY, async (err, authData) => {
+      if (err) {
+        return res.status(403).send({ message: "error during authorization." });
+      }
+
+      // authorized : delete user from db
+      try {
+        await prisma.user.delete({
+          where: {
+            id: authData.id,
+          },
+        });
+      } catch (err) {
+        console.log("delete user err");
+        console.error(err.message);
+        return res.status(400).send({ message: "error during delete user." });
+      }
+    });
   },
 ];
 
@@ -152,5 +205,8 @@ const user_put = [
 module.exports = {
   login_post,
   signup_post,
+
   user_detail,
+  user_put,
+  user_delete,
 };
