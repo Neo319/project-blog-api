@@ -21,19 +21,18 @@ const comments = [
   },
 ];
 
-// should look like : "/api/posts/:id/comments"
+// should look like : "/api/posts/comments/:postId"
 
 // --- GET all comments of one post ---
 const comments_get = async (req, res) => {
   //post to see comments for
-  const postId = req.params.postId;
+  const postId = parseInt(req.params.postId);
 
   // temp: returns first 10 comments, selecting date, author, text ONLY.
 
   try {
     const result = await prisma.comment.findMany({
       select: {
-        user: true,
         date: true,
         text: true,
         // TODO: return user object selecting only name?
