@@ -42,7 +42,7 @@ const posts_get = async (req, res) => {
 };
 
 //temp: sample req
-// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": 1, "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
+// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": 1, "title": "newPost", "text": "{"article": "Hello! This is a sample post."}}' http://localhost:3000/api/posts/
 
 // --- protected : POST new blog posts ---
 const posts_post = [
@@ -99,7 +99,7 @@ const posts_post = [
 ];
 
 //temp: sample req
-// curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": "1", "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
+// curl -X PUT -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": "1", "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
 
 // --- protected : PUT/UPDATE blog posts ---
 const posts_put = [
@@ -157,13 +157,16 @@ const posts_put = [
   },
 ];
 
+//temp: sample req
+// curl -X DELETE -H "Authorization: Bearer >token<" http://localhost:3000/api/posts/<postId>
+
 // --- protected : DELETE blog posts ---
 
 const posts_delete = [
   verify,
   async (req, res) => {
     //get post id from params
-    const postId = req.params.id;
+    const postId = parseInt(req.params.id);
 
     // ensure authorized user is post author
     jwt.verify(req.token, SECRET_KEY, async (err, authData) => {
@@ -210,4 +213,7 @@ const posts_delete = [
 module.exports = {
   posts_get,
   posts_post,
+
+  posts_put,
+  posts_delete,
 };
