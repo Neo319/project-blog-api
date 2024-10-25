@@ -25,6 +25,7 @@ const posts = [
 // --- GET list of blog posts ---
 const posts_get = (req, res) => {
   // temp implementation: returns ALL posts, selecting title, date, author ONLY.
+  // ------------- TODO: read from prisma here -------------
   const result = posts.find((post) => {
     return { title: post.title, date: post.date }; // TODO: name is complicated.
   });
@@ -57,7 +58,7 @@ const posts_post = [
         return res.status(403).send({ message: "error during authorization." });
       }
 
-      const userIsAuthor = authData.isAuthor;
+      const userIsAuthor = authData.user.isAuthor;
       if (!userIsAuthor)
         return res
           .status(403)
@@ -65,9 +66,15 @@ const posts_post = [
 
       // data is good, user is verified; post article
       //temp: just return the article
+      // ------------- TODO: upload to prisma here -------------
       res.json({
         message: "Authorized user + data and posted article.",
-        data: authData,
+        data: {
+          authorId,
+          title,
+          text,
+          isPublic: isPublic === "true" ? true : false,
+        },
       });
     });
   },
