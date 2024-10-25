@@ -30,7 +30,7 @@ const posts_get = async (req, res) => {
     select: {
       title: true,
       date: true,
-      User: true,
+      // TODO: return user object selecting only name?
     },
     take: 10,
   });
@@ -70,7 +70,6 @@ const posts_post = [
           .send({ message: "Forbidden: user is not author." });
 
       // data is good, user is verified; post article
-      //temp: just return the article
       try {
         await prisma.post.create({
           data: {
@@ -102,15 +101,15 @@ const posts_post = [
 //temp: sample req
 // curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": "1", "title": "newPost", "text": "Hello! This is a sample post."}' http://localhost:3000/api/posts/
 
-// --- protected : POST new blog posts ---
+// --- protected : PUT/UPDATE blog posts ---
 const posts_put = [
   verify,
   (req, res) => {
     // temp: no db
-    const { authorId, title, text, isPublic } = req.body;
+    const { postId, title, text, isPublic } = req.body;
 
     // ensure req has needed data
-    if (!authorId || !title || !text) {
+    if (!postId || !title || !text) {
       console.log("missing data to post.");
       return res.status(400).send({ message: "missing data to post." });
     }
@@ -128,8 +127,23 @@ const posts_put = [
           .send({ message: "Forbidden: user is not author." });
 
       // data is good, user is verified; post article
-      //temp: just return the article
-      // ------------- TODO: update to prisma here -------------
+      try {
+        await prisma.post.update({
+          where: {
+            id: postId,
+          },
+          data: {
+            title: title,
+            textData: text,
+
+            isPublic: isPublic === "true" ? true : false,
+          },
+        });
+      } catch (err) {
+        console.log("error during post update.");
+        return res.status(400).send({ message: "Error during post update." });
+      }
+
       res.json({
         message: "Authorized user + data and posted article.",
         data: {
@@ -143,10 +157,47 @@ const posts_put = [
   },
 ];
 
+// --- protected : DELETE blog posts ---
+
 const posts_delete = [
   verify,
   async (req, res) => {
-    res.send("deletion not implemented");
+    //get post id from params
+    const postId = req.params.id;
+
+    // ensure authorized user is post author
+    jwt.verify(req.token, SECRET_KEY, async (err, authData) => {
+      if (err) {
+        return res.status(403).send({ message: "error during authorization." });
+      }
+
+      // get user id from auth
+      const userId = authData.user.id;
+      // get post id from db
+      const post = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+      });
+      // ensure userId matches post's author
+      if (!(userId === post.userId)) {
+        return res
+          .status(403)
+          .send({ message: "Forbidden: user is not this post's author." });
+      }
+      // authorization complete: delete post from db
+      try {
+        await prisma.post.delete({
+          where: {
+            id: postId,
+          },
+        });
+      } catch (err) {
+        console.log("error during post deletion.");
+        res.status(400).send({ message: "error during post deletion." });
+      }
+      res.send({ message: `Post of id ${postId} successfully deleted` });
+    });
   },
 ];
 
