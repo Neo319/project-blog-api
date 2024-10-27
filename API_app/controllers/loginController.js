@@ -18,6 +18,8 @@ const login_post = async (req, res) => {
   // getting credentials
   const { username, password } = req.body;
 
+  console.log(req.body);
+
   if (!username || !password) {
     console.log("error: incomplete request");
     return res.status(403).send({ message: "Error: incomplete request." });

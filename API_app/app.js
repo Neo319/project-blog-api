@@ -17,6 +17,9 @@ app.use(function setCors(req, res, next) {
   next();
 });
 
+//middleware: parse url-encoded requests (for login forms, etc.)
+app.use(express.urlencoded({ extended: false }));
+
 app.get("/", (req, res) => {
   res.json({
     message: "hello world!",

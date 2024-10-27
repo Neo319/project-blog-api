@@ -12,6 +12,23 @@
   <h1>Project File Uploader (auth)</h1>
   <p>Tmp: a very simple implementation to list posts</p>
 
+  <h2>Login to create posts</h2>
+  <!-- temp: logging in via local host route. -->
+  <form action="http://localhost:3000/api/login" method="post" id="login_form">
+    <label for="username">Username: </label>
+    <input type="text" name="username">
+    <br />
+
+    <label for="password">Password: </label>
+    <input type="password" name="password">
+    <br />
+
+    <input type="submit" value="Login" id="login_submit">
+
+    <span>[debug]: in this implementation this form should create a token and attach it to the header as a cookie (?)</span>
+
+  </form>
+
   <h2>List all Posts: </h2>
 
   <ul id="postList">

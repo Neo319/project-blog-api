@@ -1,5 +1,6 @@
 const postList = document.getElementById("postList");
 
+// ---- Listing posts functionality ----
 const getPosts = async function () {
   console.log("getPosts Runs");
 
