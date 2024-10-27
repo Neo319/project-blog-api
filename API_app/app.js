@@ -11,6 +11,12 @@ const app = express();
 //parsing json payloads
 app.use(express.json());
 
+// custom middlware: ensuring requests from local machine are allowed
+app.use(function setCors(req, res, next) {
+  res.set("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+  next();
+});
+
 app.get("/", (req, res) => {
   res.json({
     message: "hello world!",
