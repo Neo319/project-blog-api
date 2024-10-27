@@ -4,14 +4,25 @@ const getPosts = async function () {
   console.log("getPosts Runs");
 
   try {
-    await fetch("http://localhost:3000/api", {
+    const result = await fetch("http://localhost:3000/api/posts/", {
       mode: "cors",
-    }).then((response) => {
-      console.log(response.json());
     });
+    return result.json();
   } catch (err) {
     console.log(err);
   }
 };
 
-getPosts();
+const populateList = (async function () {
+  const data = await getPosts();
+  const posts = data.posts;
+
+  posts.map((post) => {
+    console.log(post);
+
+    var liElement = document.createElement("li");
+    liElement.textContent = post.title;
+
+    postList.appendChild(liElement);
+  });
+})();
