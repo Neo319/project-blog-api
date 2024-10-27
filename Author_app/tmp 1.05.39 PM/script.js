@@ -18,11 +18,22 @@ const populateList = (async function () {
   const posts = data.posts;
 
   posts.map((post) => {
-    console.log(post);
-
     var liElement = document.createElement("li");
-    liElement.textContent = post.title;
+    var liContent = document.createElement("p");
 
+    //converting date
+    var isoDate = new Date(post.date);
+
+    liContent.innerHTML = `<p>
+      ${post.title} 
+      <br /> 
+      <b>author: </b>${post.User.username} 
+      <br />
+      <b>posted: </b>${isoDate.toLocaleString()}
+    </p>`;
+    // todo: add link to article,
+
+    liElement.appendChild(liContent);
     postList.appendChild(liElement);
   });
 })();
