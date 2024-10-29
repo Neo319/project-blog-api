@@ -1,27 +1,57 @@
 const postList = document.getElementById("postList");
 
 // ---- Check for existing login token
-const isLoggedIn = localStorage.getItem("token");
-
+const loginToken = localStorage.getItem("token");
 const login_div = document.getElementById("login_div");
+let userData = {};
 
 // logging out functionality
-if (isLoggedIn) {
-  //TODO: fetch user name when token exists
+async function getUser() {
+  console.log("getting user");
 
-  login_div.innerHTML = `
-    <span>You are logged in!</span>
+  const response = await fetch(`http://localhost:3000/api/user`, {
+    headers: {
+      Authorization: `Bearer ${loginToken}`,
+    },
+    mode: "cors",
+  });
+
+  if (response.ok) return response;
+  else {
+    console.log("login failed -- ", response);
+    return false;
+  }
+}
+
+if (loginToken) {
+  (async () => {
+    //TODO: fetch user name when token exists
+    const data = await getUser();
+    const jsonData = await data.json();
+    console.log(jsonData.data.user);
+
+    if (!data) {
+      console.log("login failed");
+      localStorage.clear("token");
+      return false;
+    }
+
+    userData = jsonData.data.user;
+
+    login_div.innerHTML = `
+    <span>User ${userData.username}, you are logged in!</span>
     <br />
     <button id="logout_button">Log Out</button>`;
 
-  const logoutButton = document.getElementById("logout_button");
-  logoutButton.addEventListener("click", () => {
-    console.log("logout");
-    localStorage.removeItem("token");
-  });
+    const logoutButton = document.getElementById("logout_button");
+    logoutButton.addEventListener("click", () => {
+      console.log("logout");
+      localStorage.removeItem("token");
+    });
+  })();
 }
 
-if (!isLoggedIn) {
+if (!loginToken) {
   // Login functionality - placing login token in local storage
 
   const loginButton = document.getElementById("login_submit");
@@ -110,8 +140,18 @@ const populateList = (async function () {
 // '{"authorId": 1, "title": "newPost", "text": "{"article": "Hello! This is a sample post."}}' http://localhost:3000/api/posts/
 
 // --- CREATE NEW POST FUNCTIONALITY ---
-function sendPost(data) {
+async function sendPost(data) {
   console.log("sending ", data);
+
+  // collect & format data correctly
+  const postBody = {
+    // authorId
+  };
+
+  // await fetch("http://localhost:3000/api/posts/", {
+  //   method: "POST",
+  //   body: data
+  // })
 }
 
 const sendPostForm = document.getElementById("post_form");
