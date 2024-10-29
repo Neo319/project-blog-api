@@ -4,6 +4,7 @@ const postList = document.getElementById("postList");
 const loginToken = localStorage.getItem("token");
 const login_div = document.getElementById("login_div");
 let userData = {};
+let userIsAuthor = false;
 
 // logging out functionality
 async function getUser() {
@@ -38,8 +39,11 @@ if (loginToken) {
 
     userData = jsonData.data.user;
 
+    // this controls permissions
+    userIsAuthor = userData.isAuthor;
+
     login_div.innerHTML = `
-    <span>User ${userData.username}, you are logged in!</span>
+    <span>User <b> ${userData.username} </b>, you are logged in!</span>
     <br />
     <button id="logout_button">Log Out</button>`;
 
@@ -141,17 +145,24 @@ const populateList = (async function () {
 
 // --- CREATE NEW POST FUNCTIONALITY ---
 async function sendPost(data) {
-  console.log("sending ", data);
-
   // collect & format data correctly
   const postBody = {
-    // authorId
+    authorId: userData.id,
+    title: data[0],
+    text: { article: data[1] },
   };
 
-  // await fetch("http://localhost:3000/api/posts/", {
-  //   method: "POST",
-  //   body: data
-  // })
+  const result = await fetch("http://localhost:3000/api/posts/", {
+    method: "POST",
+    body: JSON.stringify(postBody),
+    headers: {
+      Authorization: `Bearer ${loginToken}`,
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    mode: "cors",
+  });
+
+  console.log(result);
 }
 
 const sendPostForm = document.getElementById("post_form");
