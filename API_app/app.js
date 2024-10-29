@@ -6,16 +6,20 @@ const port = process.env.PORT || 2000;
 const indexRouter = require("./routes/index");
 const postsRouter = require("./routes/posts");
 
+const cors = require("cors");
+
 const app = express();
 
 //parsing json payloads
 app.use(express.json());
 
-// custom middlware: ensuring requests from local machine are allowed
-app.use(function setCors(req, res, next) {
-  res.set("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
-  next();
-});
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500", // Adjust origin if needed
+    methods: "POST,GET,OPTIONS",
+    allowedHeaders: "Content-Type",
+  })
+);
 
 //middleware: parse url-encoded requests (for login forms, etc.)
 app.use(express.urlencoded({ extended: false }));

@@ -1,5 +1,15 @@
 const postList = document.getElementById("postList");
 
+// ---- Check for existing login token
+const isLoggedIn = localStorage.getItem("token");
+console.log("[debug]: login = ", isLoggedIn);
+
+const login_div = document.getElementById("login_div");
+
+if (isLoggedIn) {
+  login_div.innerHTML = "You are logged in!";
+}
+
 // ---- Listing posts functionality ----
 const getPosts = async function () {
   console.log("getPosts Runs");
@@ -38,3 +48,41 @@ const populateList = (async function () {
     postList.appendChild(liElement);
   });
 })();
+
+// Login functionality - placing login token in local storage
+
+const loginButton = document.getElementById("login_submit");
+const loginForm = document.getElementById("login_form");
+
+loginButton.addEventListener("click", async (e) => {
+  e.preventDefault();
+  console.log("login plz");
+
+  // get credentials entered
+  const username = loginForm.elements[0].value;
+  const password = loginForm.elements[1].value;
+
+  // send request
+  const loginResult = await fetch("http://localhost:3000/api/login", {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+  const data = await loginResult.json();
+
+  // validate request result
+  if (loginResult.ok) {
+    console.log("request is ok.");
+    console.log(data);
+  } else {
+    console.log("login failed.");
+  }
+
+  // save to local storage
+  localStorage.setItem("token", data.token);
+});

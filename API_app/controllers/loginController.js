@@ -22,7 +22,7 @@ const login_post = async (req, res) => {
 
   if (!username || !password) {
     console.log("error: incomplete request");
-    return res.status(403).send({ message: "Error: incomplete request." });
+    return res.status(400).send({ message: "Error: incomplete request." });
   }
 
   // Find user
