@@ -80,8 +80,6 @@ const populateList = (async function () {
   const data = await getPosts();
   const posts = data.posts;
 
-  console.log(posts);
-
   posts.map((post) => {
     var liElement = document.createElement("li");
     var liContent = document.createElement("p");
@@ -110,3 +108,21 @@ const populateList = (async function () {
 // NOTE: INFO REQUIRED FOR POSTING...
 // curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d \
 // '{"authorId": 1, "title": "newPost", "text": "{"article": "Hello! This is a sample post."}}' http://localhost:3000/api/posts/
+
+// --- CREATE NEW POST FUNCTIONALITY ---
+function sendPost(data) {
+  console.log("sending ", data);
+}
+
+const sendPostForm = document.getElementById("post_form");
+const sendPostButton = document.getElementById("send_post");
+
+sendPostButton.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  //manipulate data
+  let elements = Array.from(sendPostForm.elements);
+  let data = [elements[0].value, elements[1].value];
+
+  sendPost(data);
+});
