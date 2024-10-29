@@ -37,6 +37,25 @@
     <li>tmp: list display</li>
   </ul>
 
+  <button id="post_expand" popovertarget="post_form">Create new Post...</button>
+
+  <form popover action="" id="post_form">
+    <h2>Create New Post</h2>
+
+    <label for="title">Title: </label>
+    <br />
+    <input type="text" name="title" id="title">
+    <br />
+
+    <label for="text"> Post Content: </label>
+    <br />
+    <textarea type="textarea" name="text" id="text" autocorrect="on" rows="4" cols="50"></textarea>
+    <br />
+
+    <input type="submit" value="Upload Post!">
+
+  </form>
+
   <script src="script.js"></script>
 </body>
 
