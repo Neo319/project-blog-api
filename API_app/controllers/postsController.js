@@ -20,6 +20,8 @@ const posts_get = async (req, res) => {
           username: true,
         },
       },
+      isPublic: true,
+      id: true,
     },
     take: 10,
   });

@@ -80,6 +80,8 @@ const populateList = (async function () {
   const data = await getPosts();
   const posts = data.posts;
 
+  console.log(posts);
+
   posts.map((post) => {
     var liElement = document.createElement("li");
     var liContent = document.createElement("p");
@@ -93,7 +95,11 @@ const populateList = (async function () {
       <b>author: </b>${post.User.username} 
       <br />
       <b>posted: </b>${isoDate.toLocaleString()}
-    </p>`;
+      <br />
+      <b>public: </b>${post.isPublic}
+    </p>
+    <button id="update_post_${post.id}">Update Post...</button>`;
+
     // todo: add link to article,
 
     liElement.appendChild(liContent);
@@ -101,5 +107,6 @@ const populateList = (async function () {
   });
 })();
 
+// NOTE: INFO REQUIRED FOR POSTING...
 // curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d \
 // '{"authorId": 1, "title": "newPost", "text": "{"article": "Hello! This is a sample post."}}' http://localhost:3000/api/posts/
