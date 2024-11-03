@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500", // Adjust origin if needed
+    origin: ["http://127.0.0.1:5500", "http://localhost:5173"], // Adjust origin if needed
     methods: "POST, GET, PUT, DELETE",
     allowedHeaders: ["Content-Type", "Authorization"],
   })
