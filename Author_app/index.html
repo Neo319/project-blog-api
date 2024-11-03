@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project File Uploader (auth)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Project File Uploader (auth)</h1>
+  <p>Tmp: a very simple implementation to list posts</p>
+
+  <div id="login_div">
+    <h2>Login to create posts</h2>
+    <!-- temp: logging in via local host route. -->
+    <form action="http://localhost:3000/api/login" method="post" id="login_form">
+      <label for="username">Username: </label>
+      <input type="text" name="username">
+      <br />
+
+      <label for="password">Password: </label>
+      <input type="password" name="password">
+      <br />
+
+      <input type="submit" value="Login" id="login_submit">
+
+      <span>[debug]: in this implementation this form should create a token and attach it to the header as a cookie (?)</span>
+
+    </form>
+  </div>
+
+  <h2>List all Posts: </h2>
+
+  <ul id="postList">
+    <li>tmp: list display</li>
+  </ul>
+
+  <!-- CREATE POSTS ( + UPDATE? ) -->
+  <button id="post_expand" popovertarget="post_form">Create new Post...</button>
+
+  <form popover action="" id="post_form">
+    <h2>Create New Post</h2>
+
+    <label for="title">Title: </label>
+    <br />
+    <input type="text" name="title" id="title">
+    <br />
+
+    <label for="text"> Post Content: </label>
+    <br />
+    <textarea type="textarea" name="text" id="text" autocorrect="on" rows="4" cols="50"></textarea>
+    <br />
+
+    <input type="submit" value="Upload Post!" id="send_post">
+
+  </form>
+
+  <form action=""></form>
+
+  <!-- READ / UPDATE POSTS -->
+
+  <!-- DELETE POSTS -->
+  <script src="script.js"></script>
+</body>
+
+</html>
