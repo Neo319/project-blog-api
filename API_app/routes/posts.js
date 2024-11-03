@@ -11,6 +11,9 @@ router.use("/comments", commentsRouter);
 // list posts
 router.get("/", postsController.posts_get);
 
+// post detail
+router.get("/:id/", postsController.post_detail_get);
+
 // create new post (protected)
 router.post("/", postsController.posts_post);
 

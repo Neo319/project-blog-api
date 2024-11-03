@@ -32,6 +32,26 @@ const posts_get = async (req, res) => {
   });
 };
 
+// --- GET post detail (unprotected) ---
+const post_detail_get = async (req, res) => {
+  let result;
+  try {
+    result = await prisma.post.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+  } catch (err) {
+    console.log(err.message);
+    return err;
+  }
+
+  return res.json({
+    message: "GET post detail success",
+    post: result,
+  });
+};
+
 //temp: sample req
 // curl -X POST -H "Authorization: Bearer >token<" -H "Content-Type: application/json" -d '{"authorId": 1, "title": "newPost", "text": "{"article": "Hello! This is a sample post."}}' http://localhost:3000/api/posts/
 
@@ -198,6 +218,7 @@ const posts_delete = [
 
 module.exports = {
   posts_get,
+  post_detail_get,
   posts_post,
 
   posts_put,
