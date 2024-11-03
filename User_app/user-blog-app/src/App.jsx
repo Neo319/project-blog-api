@@ -1,34 +1,11 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import "./App.css";
-
-// //getting posts
-// const { posts } = (async () => {
-//   const data = await fetch("http://localhost:3000/api/posts");
-//   const jsonData = await data.json();
-//   console.log(jsonData.posts);
-//   return jsonData.posts;
-// })();
+import useFetchPosts from "./hooks/useFetchPosts";
+("./hooks/useFetchPosts");
 
 function App() {
   //getting posts
-  const [posts, setPosts] = useState(null);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/posts/");
-        const jsonData = await response.json();
-        console.log(jsonData.posts);
-        setPosts(Array.from(jsonData.posts));
-      } catch (err) {
-        console.error("error fetching posts", err);
-      }
-    };
-
-    // calls above defined function
-    fetchPosts();
-    // ensure effect is called only when page loads.
-  }, []);
+  const { posts, loading } = useFetchPosts("http://localhost:3000/api/posts");
 
   return (
     <>
@@ -38,12 +15,12 @@ function App() {
 
       <ul>
         <li>placeholder</li>
-        {posts ? (
+        {loading ? (
+          <li> Loading Posts... </li>
+        ) : (
           posts.map((post, index) => {
             return <li key={index}>{post.title}</li>;
           })
-        ) : (
-          <li>Loading Posts...</li>
         )}
       </ul>
 
