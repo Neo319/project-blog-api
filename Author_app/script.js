@@ -51,6 +51,7 @@ if (loginToken) {
     logoutButton.addEventListener("click", () => {
       console.log("logout");
       localStorage.removeItem("token");
+      window.location.reload();
     });
   })();
 }
@@ -77,7 +78,7 @@ if (!loginToken) {
         password,
       }),
       headers: {
-        "Content-type": "application/json; charset=UTF-8",
+        "Content-type": "application/json",
       },
     });
     const data = await loginResult.json();
@@ -88,6 +89,7 @@ if (!loginToken) {
       console.log(data);
     } else {
       console.log("login failed.");
+      return false;
     }
 
     // save to local storage
