@@ -167,17 +167,40 @@ async function sendPost(data) {
     text: { article: data[1] },
   };
 
-  const result = await fetch("http://localhost:3000/api/posts/", {
-    method: "POST",
-    body: JSON.stringify(postBody),
-    headers: {
-      Authorization: `Bearer ${loginToken}`,
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    mode: "cors",
-  });
+  if (!openedPost) {
+    const result = await fetch("http://localhost:3000/api/posts/", {
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      mode: "cors",
+    });
 
-  console.log(result);
+    console.log(result);
+  } else {
+    try {
+      postBody.postId = parseInt(openedPost);
+      console.log(postBody);
+      const result = await fetch("http://localhost:3000/api/posts/", {
+        method: "PUT",
+        body: JSON.stringify(postBody),
+        headers: {
+          Authorization: `Bearer ${loginToken}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        mode: "cors",
+      });
+
+      console.log(result);
+    } catch (err) {
+      console.log(err.message);
+      return err;
+    }
+  }
+
+  window.location.reload();
 }
 
 const sendPostForm = document.getElementById("post_form");
@@ -189,6 +212,8 @@ sendPostButton.addEventListener("click", (e) => {
   //manipulate data
   let elements = Array.from(sendPostForm.elements);
   let data = [elements[0].value, elements[1].value];
+
+  console.log("sending ", data);
 
   sendPost(data);
 });
@@ -203,6 +228,8 @@ async function populatePostForm(postId) {
   // TODO: get an individual post from API
   elements[0].value = data.post.title;
   elements[1].value = data.post.textData.article;
+
+  setOpenedPost(postId);
 }
 
 const createPostBtn = document.getElementById("post_expand");
@@ -212,6 +239,15 @@ createPostBtn.addEventListener("click", function clearPost() {
 
   elements[0].value = "";
   elements[1].value = "";
+
+  setOpenedPost(false);
 });
+
+// const debug = document.getElementById("debugSpan");
+
+function setOpenedPost(x) {
+  openedPost = x;
+  // debug.textContent = `openedPost = ${openedPost}`;
+}
 
 // TODO: use openedPost to determine action of send post btn...
