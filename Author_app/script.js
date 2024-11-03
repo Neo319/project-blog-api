@@ -6,6 +6,9 @@ const login_div = document.getElementById("login_div");
 let userData = {};
 let userIsAuthor = false;
 
+// state that tracks id of post to update
+let openedPost = false;
+
 // logging out functionality
 async function getUser() {
   console.log("getting user");
@@ -140,6 +143,7 @@ const populateList = (async function () {
     let updateBtn = document.createElement("button");
     updateBtn.id = `update_post_${post.id}`;
     updateBtn.textContent = "Update Post...";
+    updateBtn.popoverTargetElement = sendPostForm;
 
     liElement.appendChild(updateBtn);
 
@@ -189,14 +193,25 @@ sendPostButton.addEventListener("click", (e) => {
   sendPost(data);
 });
 
-// TODO: use the same sendPostForm to update Posts?
-
 async function populatePostForm(postId) {
   // get post data
-  const post = await fetch(`http://localhost:3000/api/posts/`);
+  const post = await fetch(`http://localhost:3000/api/posts/${postId}`);
+  const data = await post.json();
 
   const elements = Array.from(sendPostForm.elements);
 
   // TODO: get an individual post from API
-  // elements[0].textContent = await
+  elements[0].value = data.post.title;
+  elements[1].value = data.post.textData.article;
 }
+
+const createPostBtn = document.getElementById("post_expand");
+// --- CLEAR POST FORM ON CREATE NEW POST ---
+createPostBtn.addEventListener("click", function clearPost() {
+  const elements = Array.from(sendPostForm.elements);
+
+  elements[0].value = "";
+  elements[1].value = "";
+});
+
+// TODO: use openedPost to determine action of send post btn...
