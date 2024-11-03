@@ -29,7 +29,6 @@ if (loginToken) {
     //TODO: fetch user name when token exists
     const data = await getUser();
     const jsonData = await data.json();
-    console.log(jsonData.data.user);
 
     if (!data) {
       console.log("login failed");
@@ -131,13 +130,23 @@ const populateList = (async function () {
       <b>posted: </b>${isoDate.toLocaleString()}
       <br />
       <b>public: </b>${post.isPublic}
-    </p>
-    <button id="update_post_${post.id}">Update Post...</button>`;
-
-    // todo: add link to article,
+    </p>`;
 
     liElement.appendChild(liContent);
     postList.appendChild(liElement);
+
+    // todo: add link to article,
+    // --- UPDATE POST FUNCTIONALITY ---
+    let updateBtn = document.createElement("button");
+    updateBtn.id = `update_post_${post.id}`;
+    updateBtn.textContent = "Update Post...";
+
+    liElement.appendChild(updateBtn);
+
+    updateBtn.addEventListener("click", async () => {
+      console.log(`update ${post.id}`);
+      await populatePostForm(post.id);
+    });
   });
 })();
 
@@ -179,3 +188,15 @@ sendPostButton.addEventListener("click", (e) => {
 
   sendPost(data);
 });
+
+// TODO: use the same sendPostForm to update Posts?
+
+async function populatePostForm(postId) {
+  // get post data
+  const post = await fetch(`http://localhost:3000/api/posts/`);
+
+  const elements = Array.from(sendPostForm.elements);
+
+  // TODO: get an individual post from API
+  // elements[0].textContent = await
+}
