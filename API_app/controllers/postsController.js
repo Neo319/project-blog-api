@@ -7,7 +7,40 @@ const verify = require("../config/jwt");
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-// --- GET list of blog posts ---
+//todo: seperate private and public posts get functions
+
+// --- GET list of blog posts (PRIVATE) ---
+const private_posts_get = [
+  verify,
+  async (req, res) => {
+    // temp: returns first 10 posts, selecting title, date, author ONLY.
+
+    const result = await prisma.post.findMany({
+      select: {
+        title: true,
+        date: true,
+        User: {
+          select: {
+            username: true,
+          },
+        },
+        isPublic: true,
+        id: true,
+      },
+      where: {
+        isPublic: true,
+      },
+      take: 10,
+    });
+
+    res.json({
+      message: "GET posts request recieved",
+      posts: result,
+    });
+  },
+];
+
+// --- GET list of blog posts (PUBLIC) ---
 const posts_get = async (req, res) => {
   // temp: returns first 10 posts, selecting title, date, author ONLY.
 
@@ -22,6 +55,9 @@ const posts_get = async (req, res) => {
       },
       isPublic: true,
       id: true,
+    },
+    where: {
+      isPublic: true,
     },
     take: 10,
   });
