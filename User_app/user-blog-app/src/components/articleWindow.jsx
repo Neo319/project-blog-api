@@ -18,7 +18,10 @@ export default function articleWindow(post, loadingPost) {
         // render post
         <>
           <h1>{postData.title}</h1>
-          <p>Author: {postData.User}</p>
+          <p>Author: {postData.User.username}</p>
+
+          {/* temp implementation: can only render basic text */}
+          <article>{postData.textData.article}</article>
         </>
       )}
     </>

@@ -40,6 +40,18 @@ const post_detail_get = async (req, res) => {
       where: {
         id: parseInt(req.params.id),
       },
+      select: {
+        id: true,
+        title: true,
+        date: true,
+        isPublic: true,
+        textData: true,
+        User: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
   } catch (err) {
     console.log(err.message);
