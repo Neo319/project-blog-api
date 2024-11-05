@@ -1,16 +1,32 @@
-// import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
+
+// hooks
 import useFetchPosts from "./hooks/useFetchPosts";
-("./hooks/useFetchPosts");
+import useOpenedPosts from "./hooks/useOpenedPosts";
+
+// components
+import articleWindow from "./components/articleWindow";
 
 function App() {
+  const [postId, setPostId] = useState(null);
+
   //getting posts
   const { posts, loading } = useFetchPosts("http://localhost:3000/api/posts");
+  // track opened post
+  const { post, loadingPost } = useOpenedPosts(
+    "http://localhost:3000/api/posts",
+    postId
+  );
 
   // TODO:
   // -place posts list in a dropdown list
   // -render main article or landing page using state
   // -stylize article content
+
+  // components to create:
+  //-nav component: general links and links to posts
+  //-viewing articles link
 
   return (
     <>
@@ -40,17 +56,29 @@ function App() {
       <h2>Posts List:</h2>
 
       <ul>
-        <li>placeholder</li>
         {loading ? (
           <li> Loading Posts... </li>
         ) : (
           posts.map((post, index) => {
-            return <li key={index}>{post.title}</li>;
+            return (
+              <li key={index}>
+                <a
+                  id={"open" + post.id}
+                  onClick={() => {
+                    setPostId(post.id);
+                  }}
+                >
+                  {post.title}
+                </a>
+              </li>
+            );
           })
         )}
       </ul>
 
       {/* TODO: render selected post through state, or 'landing page' for blog */}
+
+      <div id="content">{articleWindow(post, loadingPost)}</div>
 
       <footer>
         <span>

@@ -9,6 +9,8 @@ const useFetchPosts = (url) => {
       try {
         const response = await fetch(url);
         const jsonData = await response.json();
+        console.log(url);
+        console.log(jsonData);
         setPosts(Array.from(jsonData.posts));
       } catch (err) {
         console.error("error fetching posts", err);
