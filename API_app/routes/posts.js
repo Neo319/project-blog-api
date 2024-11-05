@@ -10,6 +10,7 @@ router.use("/comments", commentsRouter);
 
 // list posts
 router.get("/", postsController.posts_get);
+router.get("/all", postsController.private_posts_get);
 
 // post detail
 router.get("/:id/", postsController.post_detail_get);

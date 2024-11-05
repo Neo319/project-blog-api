@@ -27,12 +27,8 @@ const private_posts_get = [
         isPublic: true,
         id: true,
       },
-      where: {
-        isPublic: true,
-      },
       take: 10,
     });
-
     res.json({
       message: "GET posts request recieved",
       posts: result,
@@ -265,6 +261,7 @@ const posts_delete = [
 // TODO: POST DETAIL
 
 module.exports = {
+  private_posts_get,
   posts_get,
   post_detail_get,
   posts_post,

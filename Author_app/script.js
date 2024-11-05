@@ -105,10 +105,14 @@ const getPosts = async function () {
   console.log("getPosts Runs");
 
   try {
-    const result = await fetch("http://localhost:3000/api/posts/", {
+    const result = await fetch("http://localhost:3000/api/posts/all", {
       mode: "cors",
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
     });
-    return result.json();
+    return await result.json();
   } catch (err) {
     console.log(err);
   }
@@ -116,6 +120,7 @@ const getPosts = async function () {
 
 const populateList = (async function () {
   const data = await getPosts();
+  console.log("data=", data);
   const posts = data.posts;
 
   posts.map((post) => {
