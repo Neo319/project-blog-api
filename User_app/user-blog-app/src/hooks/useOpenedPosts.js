@@ -5,6 +5,7 @@ const useFetchPosts = (url, postId) => {
   const [loadingPost, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log("from UOP: ", postId);
     if (postId) {
       const fetchPost = async () => {
         try {
