@@ -170,6 +170,7 @@ async function sendPost(data) {
     authorId: userData.id,
     title: data[0],
     text: { article: data[1] },
+    isPublic: data[2],
   };
 
   if (!openedPost) {
@@ -216,7 +217,7 @@ sendPostButton.addEventListener("click", (e) => {
 
   //manipulate data
   let elements = Array.from(sendPostForm.elements);
-  let data = [elements[0].value, elements[1].value];
+  let data = [elements[0].value, elements[1].value, elements[2].checked];
 
   console.log("sending ", data);
 
@@ -233,6 +234,7 @@ async function populatePostForm(postId) {
   // TODO: get an individual post from API
   elements[0].value = data.post.title;
   elements[1].value = data.post.textData.article;
+  elements[2].checked = data.post.isPublic;
 
   setOpenedPost(postId);
 }

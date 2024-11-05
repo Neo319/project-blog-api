@@ -103,7 +103,6 @@ const post_detail_get = async (req, res) => {
 const posts_post = [
   verify,
   (req, res) => {
-    // temp: no db
     const { authorId, title, text, isPublic } = req.body;
 
     // ensure req has needed data
@@ -132,7 +131,7 @@ const posts_post = [
             title: title,
             textData: text,
 
-            isPublic: isPublic === "true" ? true : false,
+            isPublic: isPublic,
           },
         });
       } catch (err) {
@@ -146,7 +145,7 @@ const posts_post = [
           authorId,
           title,
           text,
-          isPublic: isPublic === "true" ? true : false,
+          isPublic: isPublic,
         },
       });
     });
@@ -183,6 +182,7 @@ const posts_put = [
 
       // data is good, user is verified; post article
       try {
+        console.log(isPublic);
         await prisma.post.update({
           where: {
             id: postId,
@@ -191,7 +191,7 @@ const posts_put = [
             title: title,
             textData: text,
 
-            isPublic: isPublic === "true" ? true : false,
+            isPublic: isPublic,
           },
         });
       } catch (err) {
@@ -204,7 +204,7 @@ const posts_put = [
         data: {
           title,
           text,
-          isPublic: isPublic === "true" ? true : false,
+          isPublic: isPublic,
         },
       });
     });
