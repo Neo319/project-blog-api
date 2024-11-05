@@ -44,12 +44,14 @@ function App() {
             The Odin Project homepage
           </a>
         </li>
-        <a
-          target="blank"
-          href="https://www.theodinproject.com/lessons/node-path-nodejs-blog-api"
-        >
-          Link to relevant lesson
-        </a>
+        <li>
+          <a
+            target="blank"
+            href="https://www.theodinproject.com/lessons/node-path-nodejs-blog-api"
+          >
+            Link to relevant lesson
+          </a>
+        </li>
       </ul>
 
       {/* TEMP: list posts before placing in nav dropdown list */}

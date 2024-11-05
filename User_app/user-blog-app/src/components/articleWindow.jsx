@@ -3,6 +3,9 @@ export default function articleWindow(post, loadingPost) {
   if (!post) return null;
 
   const postData = post.post;
+  const date = new Date(postData.date);
+  const readableDate = date.toLocaleDateString();
+  //toUTC?
 
   return (
     <>
@@ -10,7 +13,6 @@ export default function articleWindow(post, loadingPost) {
       {console.log("from AW: ", post, loadingPost)}
 
       <p id="mainDisplay">This section should contain the main article.</p>
-      {loadingPost ? <>loading post...</> : <>{JSON.stringify(post)}</>}
 
       {loadingPost ? (
         <>loading post...</>
@@ -18,10 +20,16 @@ export default function articleWindow(post, loadingPost) {
         // render post
         <>
           <h1>{postData.title}</h1>
-          <p>Author: {postData.User.username}</p>
+          <p>
+            Author: {postData.User.username}
+            <br />
+            <span>Created: {readableDate}</span>
+          </p>
 
           {/* temp implementation: can only render basic text */}
-          <article>{postData.textData.article}</article>
+          <article>
+            <p>{postData.textData.article}</p>
+          </article>
         </>
       )}
     </>
