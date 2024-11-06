@@ -1,4 +1,5 @@
 const postList = document.getElementById("postList");
+const serverURL = "https://project-blog-api-production.up.railway.app";
 
 // ---- Check for existing login token
 const loginToken = localStorage.getItem("token");
@@ -13,7 +14,7 @@ let openedPost = false;
 async function getUser() {
   console.log("getting user");
 
-  const response = await fetch(`http://localhost:3000/api/user`, {
+  const response = await fetch(serverURL + "/api/user", {
     headers: {
       Authorization: `Bearer ${loginToken}`,
     },
@@ -73,7 +74,7 @@ if (!loginToken) {
     const password = loginForm.elements[1].value;
 
     // send request
-    const loginResult = await fetch("http://localhost:3000/api/login", {
+    const loginResult = await fetch(serverURL + "/api/login", {
       method: "POST",
       body: JSON.stringify({
         username,
@@ -105,7 +106,7 @@ const getPosts = async function () {
   console.log("getPosts Runs");
 
   try {
-    const result = await fetch("http://localhost:3000/api/posts/all", {
+    const result = await fetch(serverURL + "/api/posts/all", {
       mode: "cors",
       headers: {
         Authorization: `Bearer ${loginToken}`,
@@ -174,7 +175,7 @@ async function sendPost(data) {
   };
 
   if (!openedPost) {
-    const result = await fetch("http://localhost:3000/api/posts/", {
+    const result = await fetch(serverURL + "/api/posts/", {
       method: "POST",
       body: JSON.stringify(postBody),
       headers: {
@@ -189,7 +190,7 @@ async function sendPost(data) {
     try {
       postBody.postId = parseInt(openedPost);
       console.log(postBody);
-      const result = await fetch("http://localhost:3000/api/posts/", {
+      const result = await fetch(serverURL + "/api/posts", {
         method: "PUT",
         body: JSON.stringify(postBody),
         headers: {
@@ -226,7 +227,7 @@ sendPostButton.addEventListener("click", (e) => {
 
 async function populatePostForm(postId) {
   // get post data
-  const post = await fetch(`http://localhost:3000/api/posts/${postId}`);
+  const post = await fetch(serverURL + `/api/posts/${postId}`);
   const data = await post.json();
 
   const elements = Array.from(sendPostForm.elements);
